@@ -3,28 +3,54 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<title>清华附中信息技术社</title>
 
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="css/theme.css" rel="stylesheet">
 		<link href="css/font-awesome.min.css" rel="stylesheet">
 		<!--[if lt IE 9]>
-			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 		<![endif]-->
 	</head>
 	<body>
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container">
 				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse"></button>
 					<a class="navbar-brand" href="http://www.thsitg.org">THSITG</a>
 				</div>
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
 						<li>
-							<a href="about.html">关于</a>
+						<a href="/about.html">关于</a>
 						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">项目<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="/project">所有项目</a></li>
+								<li class="divider"></li>
+								<li><a href="/project/optime">Optime</a></li>
+								<li><a href="/project/cdroom">CDRoom</a></li>
+								<li><a href="/project/thfzhp">非官方-清华附中主页</a></li>
+								<li class="divider"></li>
+								<li><a href="/project/thfz24hour">清华附中最美24小时</a></li>
+								<li><a href="/project/dff">蛋姐的食物工厂</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">友情链接<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="http://www.qhfz.edu.cn/">清华附中</a></li>
+								<li class="divider"></li>
+								<li><a href="http://www.illumer.org/">Illumer</a></li>
+								<li><a href="http://www.bndser.com/">BNDSer</a></li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><button type="button" class="btn btn-success navbar-btn" id="joinBtn">加入我们</button>
 					</ul>
 				</div>
 			</div>
@@ -37,10 +63,9 @@
 				<a class="btn btn-primary btn-lg" href="about.html">了解更多</a>
 				</p>
 			</div>
-			<hr />
 			<div class="row">
 				<div class="col-md-9">
-					<h1 style="text-align: center">我们是谁？</h1>
+					<h1>我们是谁？</h1>
 					<p>来自清华附中的信息技术爱好者们。OI，网页前后端，网络安全，移动开发，各种人才这里应有尽有。</p>
 				</div>
 				<div class="col-md-3">
@@ -51,14 +76,14 @@
 			<div class="row">
 				<div class="col-md-3"></div>
 				<div class="col-md-9">
-					<h1 style="text-align: center">我们有些什么？</h1>
+					<h1>我们有些什么？</h1>
 					<p>清华附中最美24小时，清华附中官网等</p>
 				</div>
 			</div>
 			<hr />
 			<div class="row">
 				<div class="col-md-9">
-					<h1 style="text-align: center">我们的目标？</h1>
+					<h1>我们的目标？</h1>
 					<p>那当然是没有蛀牙</p>
 					<img />
 				</div>
@@ -66,11 +91,11 @@
 			</div>
 			<hr />
 			<footer style="text-align: center">
-				<h2>About Us</h2>
-				<i class="fa fa-github fa-2x"></i>
-				<i class="fa fa-google-plus-square fa-2x"></i>
-				<i class="fa fa-weibo fa-2x"></i> 
-				<i class="fa fa-renren fa-2x"></i>
+			<h2>About Us</h2>
+			<a href="https://github.com/THSITG"><i class="fa fa-github fa-2x"></i></a>
+			<i class="fa fa-google-plus-square fa-2x"></i>
+			<i class="fa fa-weibo fa-2x"></i> 
+			<i class="fa fa-renren fa-2x"></i>
 			</footer>
 		</div>
 		<script src="js/jquery-2.1.1.min.js"></script>

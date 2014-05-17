@@ -1,6 +1,25 @@
 body {
-	padding-top:70px;
-	padding-bottom:30px;
 	width: 1200px;
 	margin:auto;
+	background-color: #EEE;
+}
+
+hr {
+	margin-bottom: 30px;
+	border-top: #CCC solid 1px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-weight: bold;
+}
+
+.row {
+	text-align: center;
+}
+
+.container[role="main"] {
+	background-color: #fff;
+	padding: 50px;
+	padding-top: 70px;
+	padding-bottom:30px;
 }
