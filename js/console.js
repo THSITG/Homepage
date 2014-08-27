@@ -6,6 +6,7 @@ var cmdList = [""];
 var hintList = [""];
 var cursor=null;
 var currow=null;
+var rows=null;
 var intervalID;
 
 // FROM http://stackoverflow.com/questions/2220196/how-to-decode-character-pressed-from-jquerys-keydowns-event-handler
@@ -87,8 +88,14 @@ var skipSet = [
 ];
 
 
+var cursor_shown=true;
 function flash() {
-	cursor.toggle();
+	if(cursor_shown)
+		cursor.css("opacity","0");
+	else
+		cursor.css("opacity","1");
+
+	cursor_shown=!cursor_shown;
 }
 
 var initRow=
@@ -104,10 +111,11 @@ var initRow=
 '</div>';
 
 function input(e) {
-	window.clearInterval(intervalID);
-	cursor.hide();
-
 	if(!readyforinput) return;
+	window.clearInterval(intervalID);
+	cursor_shown=false;
+	cursor.css("opacity","0");
+
 	readyforinput=false;
 	var proceed=true;
 
@@ -116,19 +124,25 @@ function input(e) {
 		if(len > 0) command = command.substring(0,len-1);
 	} else if(e.which == 13) {
 		try {
-			console.log("eval: "+command);
 			var result = eval(command);
 			currow.find(".result").html("=> "+result).show();
 		} catch(exception) {
 			currow.find(".error").html(exception).show();
 		}
 
-		currow=$(initRow).insertBefore(".console-row-final");
-		cursor=cursor.appendTo(currow.find(".cmd"));
-		currow.find(".result").hide();
-		currow.find(".output").hide();
-		currow.find(".error").hide();
-		command = "";
+		if(stage>=0) {
+			currow=$(initRow).insertBefore(".console-row-final");
+			cursor=cursor.appendTo(currow.find(".cmd"));
+			currow.find(".result").hide();
+			currow.find(".output").hide();
+			currow.find(".error").hide();
+			command = "";
+
+			var height = rows.height();
+			rows.css("bottom",(height>350?25:350-height) + "px");
+
+			stage+=1;
+		}
 	} else {
 		var c = e.which;
 		if($.inArray(c,ignoreSet)<0) {
@@ -161,15 +175,18 @@ function input(e) {
 		currow.find(".cont").html("THSITG $&gt; "+command);
 	}
 
-	cursor.show();
+	cursor_shown=true;
+	cursor.css("opacity","1");
 	intervalID=window.setInterval(flash,500);
-	readyforinput=true;
+	if(stage>=0) readyforinput=true;
 }
 
 function iamready() {
 	readyforinput=false;
 	$(".console-row-final").show();
 	cursor=cursor.appendTo(".console-row-final-cont");
+	cursor.css("font-size","21px");
+	stage=-1;
 }
 
 function print(v) {
@@ -181,6 +198,10 @@ function print(v) {
 
 $(document).ready(function() {
 	intervalID=window.setInterval(flash,500);
+	rows=$(".console-rows");
+	var height = rows.height();
+	rows.css("bottom",(height>350?25:350-height) + "px");
+
 	cursor=$(".console .cursor");
 	currow=$(".console-first");
 	currow.find(".result").hide();
