@@ -29,15 +29,15 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .console {
-	height: 400px;
+	height: 600px;
 
 	background: #333;
 	border: #444 solid 1px;
 	color: white;
-	-webkit-user-select: none;
 
 	cursor: default;
 	outline: 0;
+	-webkit-user-select: none;
 
 	transition: background-color 0.2s ease-in-out;
 	-o-transition: background-color 0.2s ease-in-out;
@@ -46,6 +46,8 @@ h1,h2,h3,h4,h5,h6 {
 
 	position: relative;
 	overflow: hidden;
+
+	font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
 }
 
 .console:focus {
@@ -58,6 +60,14 @@ h1,h2,h3,h4,h5,h6 {
 	position: absolute;
 
 	overflow: hidden;
+	width: 75%;
+
+	opacity: 1;
+
+	transition: opacity 0.5s ease-in-out;
+	-webkit-transition: opacity 0.5s ease-in-out;
+	-moz-transition: opacity 0.5s ease-in-out;
+	-o-transition: opacity 0.5s ease-in-out;
 }
 
 .console pre, .console .cursor {
@@ -79,11 +89,14 @@ h1,h2,h3,h4,h5,h6 {
 	-webkit-transition: opacity 0.2s ease-in-out;
 	-moz-transition: opacity 0.2s ease-in-out;
 	-o-transition: opacity 0.2s ease-in-out;
+
+	z-index: 500;
 }
 
 .console .cmd {
 	font-size: 14px;
 	line-height: 16px;
+	font-weight: bold;
 }
 
 .console .error {
@@ -101,19 +114,24 @@ h1,h2,h3,h4,h5,h6 {
 .console .output {
 	display: block;
 	color: #999;
-	font-weight: bold;
 }
 
 .console .hint {
-	color: #999;
 }
 
 .console-row {
-	margin-bottom: 15px;
+	margin-bottom: 30px;
 }
 
-.console-row-final {
-	display: none;
+.console-closed {
 	height: 250px;
-	padding-top: 50px;
+	margin-top: 150px;
+	display: none;
+	position: relative;
+	z-index: 1;
+
+	transition: opacity 0.5s ease-in-out;
+	-webkit-transition: opacity 0.5s ease-in-out;
+	-moz-transition: opacity 0.5s ease-in-out;
+	-o-transition: opacity 0.5s ease-in-out;
 }
