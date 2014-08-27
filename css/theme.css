@@ -2,6 +2,7 @@ body {
 	max-width: 1200px;
 	margin:auto;
 	background-color: #EEE;
+	padding-bottom:30px;
 }
 
 hr {
@@ -20,10 +21,66 @@ h1,h2,h3,h4,h5,h6 {
 .container[role="main"] {
 	background-color: #fff;
 	padding: 50px;
-	padding-top: 70px;
-	padding-bottom:30px;
+	padding-top: 80px;
 }
 
 #joinBtn {
 	margin-left:20px;
+}
+
+.console {
+	background: #232323;
+	border: #444 solid 1px;
+	color: white;
+	-webkit-user-select: none;
+	cursor: default;
+}
+
+.console:focus {
+	box-shadow: #AAF 0 0 5px;
+}
+
+.console pre, .console .cursor {
+	/* revert bootstrap styles */
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+	font-size: 14px;
+	line-height: 16px;
+	word-break: break-all;
+	word-wrap: break-word;
+	color: white;
+	background: none;
+	border: none;
+	border-radius: 0;
+}
+
+.console .error {
+	display: block;
+	color: #A00;
+	font-weight: bold;
+}
+
+.console .result {
+	display: block;
+	color: #0A0;
+	font-weight: bold;
+}
+
+.console .output {
+	display: block;
+	color: #999;
+	font-weight: bold;
+}
+
+.console-row {
+	margin-bottom: 15px;
+}
+
+.console .hint {
+	color: #999;
+}
+
+.console-row-final {
+	display: none;
 }
