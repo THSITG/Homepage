@@ -168,6 +168,45 @@ var initRow=
 	'<pre class="result"></pre>' +
 '</div>';
 
+function command_execute() {
+	try {
+		var result = eval(command);
+		currow.find(".result").html("=> "+result).show();
+	} catch(exception) {
+		currow.find(".error").html(exception).show();
+	}
+
+	if(stage>=0) {
+		currow=$(initRow).appendTo(".console-rows");
+		cursor=cursor.appendTo(currow.find(".cmd"));
+
+		currow.find(".result").hide();
+		currow.find(".output").hide();
+		currow.find(".error").hide();
+
+		if(stage < cmdList.length) {
+			if(cmdList[stage] != null && command != "skip_tutor()" && command != cmdList[stage])
+				stage-=1;
+			currow.find(".hint").html(hintList[stage]);
+		}
+
+		var height = rows.height();
+		rows.css("bottom",(height>550?25:550-height) + "px");
+
+		command = "";
+		stage+=1;
+	}
+}
+
+function command_backspace() {
+	var len=command.length;
+	if(len > 0) command = command.substring(0,len-1);
+}
+
+function command_autocomplete() {
+	if(stage < cmdList.length) command = cmdList[stage];
+}
+
 function input(e) {
 	if(!readyforinput) return;
 	window.clearInterval(intervalID);
@@ -178,38 +217,11 @@ function input(e) {
 	var proceed=true;
 
 	if(e.which == 8 || e.which == 46) {
-		var len=command.length;
-		if(len > 0) command = command.substring(0,len-1);
+		command_backspace();
 	} else if(e.which == 9) {
-		if(stage < cmdList.length) command = cmdList[stage];
+		command_autocomplete();
 	} else if(e.which == 13) {
-		try {
-			var result = eval(command);
-			currow.find(".result").html("=> "+result).show();
-		} catch(exception) {
-			currow.find(".error").html(exception).show();
-		}
-
-		if(stage>=0) {
-			currow=$(initRow).appendTo(".console-rows");
-			cursor=cursor.appendTo(currow.find(".cmd"));
-
-			currow.find(".result").hide();
-			currow.find(".output").hide();
-			currow.find(".error").hide();
-
-			if(stage < cmdList.length) {
-				if(cmdList[stage] != null && command != "skip_tutor()" && command != cmdList[stage])
-					stage-=1;
-				currow.find(".hint").html(hintList[stage]);
-			}
-
-			var height = rows.height();
-			rows.css("bottom",(height>550?25:550-height) + "px");
-
-			command = "";
-			stage+=1;
-		}
+		command_execute();
 	} else {
 		var c = e.which;
 		if($.inArray(c,ignoreSet)<0) {
@@ -241,6 +253,32 @@ function input(e) {
 		e.preventDefault();
 		currow.find(".cont").html("THSITG $&gt; "+command);
 	}
+
+	cursor_shown=true;
+	cursor.css("opacity","1");
+	intervalID=window.setInterval(flash,500);
+	if(stage>=0) readyforinput=true;
+}
+
+function virtual_input(e) {
+	if(!readyforinput) return;
+	window.clearInterval(intervalID);
+	cursor_shown=false;
+	cursor.css("opacity","0");
+
+	readyforinput=false;
+
+	if(e == "!DEL") {
+		command_backspace();
+	} else if(e == "\t") {
+		command_autocomplete();
+	} else if(e == "\n") {
+		command_execute();
+	} else {
+		command = command+e;
+	}
+
+	currow.find(".cont").html("THSITG $&gt; "+command);
 
 	cursor_shown=true;
 	cursor.css("opacity","1");
@@ -376,4 +414,7 @@ $(document).ready(function() {
 	$(".console-closed").css("opacity","0");
 
 	$(".console").keydown(input);
+	$(".console").focus(function() {
+		showkeyboard(virtual_input);
+	});
 });

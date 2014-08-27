@@ -1,0 +1,80 @@
+/* From http://code.tutsplus.com/tutorials/creating-a-keyboard-with-css-and-jquery--net-5774 */
+#keyboard-wrapper {
+	position: fixed;
+	bottom: -140px;
+	left: 0 ;
+	width: 320px;
+	padding: 5px 2px 0 2px;
+	opacity: 0.7;
+	background-color: #CCC;
+
+	text-align: center;
+
+	transition: bottom 0.2s ease-in-out;
+	-o-transition: bottom 0.2s ease-in-out;
+	-moz-transition: bottom 0.2s ease-in-out;
+	-webkit-transition: bottom 0.2s ease-in-out;
+}
+
+#keyboard {
+	font: 71%/1.5 Verdana, Sans-Serif;
+	background: #eee;
+	margin: auto;
+	padding: 0;
+	list-style: none;
+	font-weight: bold;
+}
+#keyboard li {
+	float: left;
+	margin: 0 1px 3px 0;
+	width: 20px;
+	height: 24px;
+	line-height: 24px;
+	text-align: center;
+	background: #fff;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+.capslock, .tab, .left-shift {
+	clear: left;
+}
+#keyboard .tab, #keyboard .delete {
+	width: 41px;
+}
+#keyboard .capslock {
+	width: 41px;
+}
+#keyboard .return {
+	width: 41px;
+}
+#keyboard .left-shift {
+	width: 51px;
+}
+#keyboard .right-shift {
+	width: 52px;
+}
+.lastitem {
+	margin-right: 0;
+}
+.uppercase {
+	text-transform: uppercase;
+}
+#keyboard .space {
+	clear: left;
+	width: 283px;
+}
+#keyboard .close {
+	width: 30px;
+}
+.on {
+	display: none;
+}
+#keyboard li:hover {
+	position: relative;
+	background-color: #AAA;
+}
+#keyboard li {
+	-webkit-user-select: none;
+	cursor: pointer;
+}
+
