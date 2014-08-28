@@ -441,13 +441,6 @@ function shell_about() {
 			"我的WeChat: @CircuitCoder");
 }
 
-function consoleClick() {
-	$(".console-input").click();
-	if(!$(".console").hasClass("console-focus")) {
-		$(".console").addClass("console-focus");
-	}
-}
-
 $(document).ready(function() {
 	intervalID=window.setInterval(flash,500);
 	rows=$(".console-rows");
@@ -462,16 +455,54 @@ $(document).ready(function() {
 	
 	$(".console-closed").css("opacity","0");
 
-	$(".console").click(consoleClick);
-	$(".console-input").click(function(e) {
-		e.stopPropagation();
-		$(this).focus();
-	});
+	if(navigator.userAgent.match(/Android/i)) {
+		// Redirect focus to a input
+		$("<input class=\"console-input\">").prependTo(".console");
+		$(".console-input").click(function(e) {
+			e.stopPropagation();
+			$(this).focus();
+		});
+
+		$(".console").click(function(e) {
+			$(".console-input").click();
+			if(!$(this).hasClass("console-focus")) {
+				$(this).addClass("console-focus");
+			}
+		});
+
+		$(".console-input").keydown(input);
+	} else if(navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+		// Same as android, but put the input outside of body
+		$("<input class=\"console-input\" style=\"top: -10000px\">").prependTo(".console");
+		$(".console-input").click(function(e) {
+			e.stopPropagation();
+			$(this).focus();
+		});
+
+		$(".console").click(function(e) {
+			$(".console-input").click();
+			if(!$(this).hasClass("console-focus")) {
+				$(this).addClass("console-focus");
+			}
+		});
+
+		$(".console-input").keydown(input);
+	} else {
+		// Keyboard events goes directly to console
+		$(".console").click(function(e) {
+			if(!$(this).hasClass("console-focus")) {
+				$(this).addClass("console-focus");
+			}
+		});
+		$(".console").attr("tabindex","1");
+		$(".console").keydown(input);
+	}
+
 	$("html").click(function(e) {
 		var target = $(e.target);
 		if(!target.is(".console") && !$.contains($(".console").get(0),e.target))
 			$(".console").removeClass("console-focus");
 	});
-
-	$(".console-input").keydown(input);
+	
+	console.log("Console loaded");
 });

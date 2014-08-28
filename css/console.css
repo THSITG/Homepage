@@ -107,11 +107,9 @@
 }
 
 .console-input {
-	outline: none;
 	position: fixed;
 	/* Hide behind navbar */
 	top: 0;
 	right: 0;
-	color: black;
 	opacity: 0;
 }
