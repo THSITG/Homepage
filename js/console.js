@@ -193,6 +193,7 @@ function command_execute() {
 		var height = rows.height();
 		rows.css("bottom",(height>550?25:550-height) + "px");
 
+		$(".console-input").val("");
 		command = "";
 		stage+=1;
 	}
@@ -204,8 +205,13 @@ function command_backspace() {
 }
 
 function command_autocomplete() {
-	if(stage < cmdList.length) command = cmdList[stage];
+	if(stage < cmdList.length) {
+		$(".console-input").val(cmdList[stage]);
+		command = cmdList[stage];
+	}
 }
+
+var charbuffered = false;
 
 function input(e) {
 	if(!readyforinput) return;
@@ -224,28 +230,57 @@ function input(e) {
 		command_execute();
 	} else {
 		var c = e.which;
-		if($.inArray(c,ignoreSet)<0) {
-			if($.inArray(c,skipSet)>=0) {
-				proceed=false;
-			} else {
-				//normalize keyCode 
-				if (_to_ascii.hasOwnProperty(c)) {
-					c = _to_ascii[c];
-				}
-				if (!e.shiftKey && (c >= 65 && c <= 90)) {
-					c = String.fromCharCode(c + 32);
-				} else if (e.shiftKey && shiftUps.hasOwnProperty(c)) {
-					//get shifted keyCode value
-					c = shiftUps[c];
-				} else {
-					c = String.fromCharCode(c);
-				}
+		if(c == 0) {
+			// Android devices
+			if(!charbuffered) {
+				window.setInterval(function() {
+					command = $(".console-input").val();
+					currow.find(".cont").html("THSITG $&gt; "+command);
+				},100);
+				charbuffered=true;
 			}
+
+			command = $(".console-input").val();
+			// Because of backspace problems, this method is abandoned
+			/*
+			window.setTimeout(function() {
+				var val = $(".console-input").val();
+				val = val.substring(val.length-1);
+				$(".console-input").val("");
+				command = command+val;
+
+				currow.find(".cont").html("THSITG $&gt; "+command);
+				cursor_shown=true;
+				cursor.css("opacity","1");
+				intervalID=window.setInterval(flash,500);
+				if(stage>=0) readyforinput=true;
+			},10);
+			return;
+			*/
 		} else {
-			c=""; //Ignore this character
+			if($.inArray(c,ignoreSet)<0) {
+				if($.inArray(c,skipSet)>=0) {
+					proceed=false;
+				} else {
+					//normalize keyCode 
+					if (_to_ascii.hasOwnProperty(c)) {
+						c = _to_ascii[c];
+					}
+					if (!e.shiftKey && (c >= 65 && c <= 90)) {
+						c = String.fromCharCode(c + 32);
+					} else if (e.shiftKey && shiftUps.hasOwnProperty(c)) {
+						//get shifted keyCode value
+						c = shiftUps[c];
+					} else {
+						c = String.fromCharCode(c);
+					}
+				}
+			} else {
+				c=""; //Ignore this character
+			}
+			
+			if(proceed) command = command+c;
 		}
-		
-		if(proceed) command = command+c;
 	}
 
 	if(proceed) {
@@ -399,6 +434,13 @@ function shell_about() {
 			"我的WeChat: @CircuitCoder");
 }
 
+function consoleClick() {
+	$(".console-input").click();
+	if(!$(".console").hasClass("console-focus")) {
+		$(".console").addClass("console-focus");
+	}
+}
+
 $(document).ready(function() {
 	intervalID=window.setInterval(flash,500);
 	rows=$(".console-rows");
@@ -413,8 +455,16 @@ $(document).ready(function() {
 	
 	$(".console-closed").css("opacity","0");
 
-	$(".console").keydown(input);
-	$(".console").focus(function() {
-		showkeyboard(virtual_input);
+	$(".console").click(consoleClick);
+	$(".console-input").click(function(e) {
+		e.stopPropagation();
+		$(this).focus();
 	});
+	$("html").click(function(e) {
+		var target = $(e.target);
+		if(!target.is(".console") && !$.contains($(".console").get(0),e.target))
+			$(".console").removeClass("console-focus");
+	});
+
+	$(".console-input").keydown(input);
 });
