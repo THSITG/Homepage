@@ -9,6 +9,10 @@ var currow=null;
 var rows=null;
 var intervalID;
 
+var bufferEnabled=false;
+var flushEnabled=false;
+var forceRepaintEnabled=false;
+
 var cmdList = [
 	"thsitg_boot()",
 	"start_tutor()",
@@ -215,8 +219,6 @@ function command_autocomplete() {
 	}
 }
 
-var charbuffered = false;
-
 function input(e) {
 	if(!readyforinput) return;
 	window.clearInterval(intervalID);
@@ -226,28 +228,31 @@ function input(e) {
 	var cur_scrolltop=$(window).scrollTop();
 
 	readyforinput=false;
-	var proceed=true;
+	var update=false;
+	var block=false;
 
 	if(e.which == 8 || e.which == 46) {
 		command_backspace();
+		block=true;
+		update=true;
 	} else if(e.which == 9) {
 		command_autocomplete();
+		block=true;
+		update=true;
 	} else if(e.which == 13) {
 		command_execute();
+		block=true;
+		update=true;
 	} else {
 		var c = e.which;
-		if(c == 0) {
-			// Android devices
-			if(!charbuffered) {
-				window.setInterval(function() {
-					console.log("int");
-					command = $(".console-input").val();
-					currow.find(".cont").html("THSITG $&gt; "+command);
-				},100);
-				charbuffered=true;
+		if(bufferEnabled || c == 0) {
+			if(forceRepaintEnabled) {
+				command = $(".console-input").val();
+				update=true;
+			} else {
+				update=false;
 			}
-
-			command = $(".console-input").val();
+			block=false;
 			// Because of backspace problems, this method is abandoned
 			/*
 			window.setTimeout(function() {
@@ -265,9 +270,10 @@ function input(e) {
 			return;
 			*/
 		} else {
+			block=true;
 			if($.inArray(c,ignoreSet)<0) {
 				if($.inArray(c,skipSet)>=0) {
-					proceed=false;
+					update=false;
 				} else {
 					//normalize keyCode 
 					if (_to_ascii.hasOwnProperty(c)) {
@@ -281,20 +287,23 @@ function input(e) {
 					} else {
 						c = String.fromCharCode(c);
 					}
+					update=true;
 				}
 			} else {
-				c=""; //Ignore this character
+				update=false;
 			}
 			
-			if(proceed) command = command+c;
+			if(update) command = command+c;
 		}
 	}
 
-	if(proceed) {
+	if(block) {
 		e.stopPropagation();
 		e.preventDefault();
-		currow.find(".cont").html("THSITG $&gt; "+command);
 	}
+
+	if(update)
+		currow.find(".cont").html("THSITG $&gt; "+command);
 
 	cursor_shown=true;
 	cursor.css("opacity","1");
@@ -471,6 +480,9 @@ $(document).ready(function() {
 		});
 
 		$(".console-input").keydown(input);
+
+		bufferEnabled=true;
+		flushEnabled=true;
 	} else if(navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
 		// Same as android, but put the input outside of body
 		$("<input class=\"console-input\" style=\"top: -10000px\">").prependTo(".console");
@@ -487,6 +499,10 @@ $(document).ready(function() {
 		});
 
 		$(".console-input").keydown(input);
+
+		bufferEnabled=true;
+		flushEnabled=true;
+		forceRepaintEnabled=true;
 	} else {
 		// Keyboard events goes directly to console
 		$(".console").click(function(e) {
@@ -496,6 +512,20 @@ $(document).ready(function() {
 		});
 		$(".console").attr("tabindex","1");
 		$(".console").keydown(input);
+	}
+
+	if(flushEnabled) {
+		$(".console-input").bind("input",function() {
+			console.log("int");
+			command = $(".console-input").val();
+			currow.find(".cont")[0].innerHTML="THSITG $&gt; "+command;
+			if(forceRepaintEnabled) {
+				//FIXME: not working right now
+				currow.hide(0,function() {
+					$(this).show();
+				});
+			}
+		});
 	}
 
 	$("html").click(function(e) {
