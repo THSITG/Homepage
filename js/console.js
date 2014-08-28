@@ -305,9 +305,9 @@ function input(e) {
 			return;
 			*/
 		} else {
-			block=true;
 			if($.inArray(c,ignoreSet)<0) {
 				if($.inArray(c,skipSet)>=0) {
+					block=false;
 					update=false;
 				} else {
 					//normalize keyCode 
@@ -322,6 +322,7 @@ function input(e) {
 					} else {
 						c = String.fromCharCode(c);
 					}
+					block=true;
 					update=true;
 				}
 			} else {
