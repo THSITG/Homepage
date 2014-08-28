@@ -219,6 +219,8 @@ function input(e) {
 	cursor_shown=false;
 	cursor.css("opacity","0");
 
+	var cur_scrolltop=$(window).scrollTop();
+
 	readyforinput=false;
 	var proceed=true;
 
@@ -234,10 +236,16 @@ function input(e) {
 			// Android devices
 			if(!charbuffered) {
 				window.setInterval(function() {
+					console.log("int");
 					command = $(".console-input").val();
 					currow.find(".cont").html("THSITG $&gt; "+command);
 				},100);
 				charbuffered=true;
+
+				$(".console-input").bind("input",function() {
+					e.stopPropagation();
+					e.preventDefault();
+				});
 			}
 
 			command = $(".console-input").val();
