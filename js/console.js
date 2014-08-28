@@ -245,11 +245,6 @@ function input(e) {
 					currow.find(".cont").html("THSITG $&gt; "+command);
 				},100);
 				charbuffered=true;
-
-				$(".console-input").bind("input",function() {
-					e.stopPropagation();
-					e.preventDefault();
-				});
 			}
 
 			command = $(".console-input").val();
