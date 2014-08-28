@@ -201,7 +201,11 @@ function command_execute() {
 
 function command_backspace() {
 	var len=command.length;
-	if(len > 0) command = command.substring(0,len-1);
+	if(len > 0) {
+		newcmd = command.substring(0,len-1);
+		$(".console-input").val(newcmd);
+		command=newcmd;
+	}
 }
 
 function command_autocomplete() {
