@@ -24,6 +24,14 @@ $(document).ready(function() {
 				if($(".join-popup").hasClass("popup-hidden")) $(".join-popup").hide();
 			},150);
 		});
+
+		$(".join-popup td").click(function(e) {
+			var $this=$(this);
+			if($this.attr("data-copy")) {
+				window.prompt("24小时在线, 但是可不要半夜打手机哦",$this.attr("data-copy"));
+				e.stopPropagation();
+			}
+		});
 	});
 
 	var foot=$("#ph_footer").load("/footer.html");

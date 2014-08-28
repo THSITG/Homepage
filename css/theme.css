@@ -70,11 +70,11 @@ h1,h2,h3,h4,h5,h6 {
 	left: 50%;
 	top: 0;
 
-	margin: 20px 0 0 -125px;
+	margin: 20px 0 0 -45%;
 	box-shadow: black 0 0 5px;
 
 	z-index: 2000;
 
-	width: 250px;
+	width: 90%;
 }
 
