@@ -163,6 +163,13 @@ function flash() {
 	cursor_shown=!cursor_shown;
 }
 
+function repositioning_rows() {
+	var height = rows.height();
+	//FIXME: Don't know why this isn't working
+	//rows.css("bottom",(height>550?25:575-height) + "px");
+	rows.css("top",(height>550?590-height:40) + "px");
+}
+
 var initRow=
 '<div class="console-row">' +
 	'<div class="hint">' +
@@ -202,9 +209,6 @@ function command_execute() {
 				stage-=1;
 			currow.find(".hint").html(hintList[stage]);
 		}
-
-		var height = rows.height();
-		rows.css("bottom",(height>550?25:550-height) + "px");
 
 		$(".console-input").val("");
 		command = "";
@@ -337,6 +341,8 @@ function input(e) {
 		currow.find(".cont").html("THSITG $&gt; "+command);
 		if(cmdHistPointer == cmdHist.length-1) cmdHist[cmdHistPointer] = command;
 	}
+
+	repositioning_rows();
 
 	cursor_shown=true;
 	cursor.css("opacity","1");
@@ -486,8 +492,8 @@ function shell_about() {
 $(document).ready(function() {
 	intervalID=window.setInterval(flash,500);
 	rows=$(".console-rows");
-	var height = rows.height();
-	rows.css("bottom",(height>550?25:550-height) + "px");
+
+	addResizeListener(rows[0],repositioning_rows);
 
 	cursor=$(".console .cursor");
 	currow=$(".console-first");
