@@ -13,6 +13,9 @@ var bufferEnabled=false;
 var flushEnabled=false;
 var forceRepaintEnabled=false;
 
+var cmdHist = [""];
+var cmdHistPointer = 0;
+
 var cmdList = [
 	"thsitg_boot()",
 	"start_tutor()",
@@ -140,7 +143,7 @@ var shiftUps = {
 };
 
 var ignoreSet = [
-	37, 38, 39, 40,	//Arrow keys
+	37, 39,	//Arrow keys
 	16, 17, 18 // Control keys
 ];
 
@@ -173,11 +176,17 @@ var initRow=
 '</div>';
 
 function command_execute() {
-	try {
-		var result = eval(command);
-		currow.find(".result").html("=> "+result).show();
-	} catch(exception) {
-		currow.find(".error").html(exception).show();
+	if(command != "") {
+		try {
+			var result = eval(command);
+			currow.find(".result").html("=> "+result).show();
+		} catch(exception) {
+			currow.find(".error").html(exception).show();
+		}
+
+		cmdHist[cmdHist.length-1]=command;
+		cmdHistPointer = cmdHist.length;
+		cmdHist.push("");
 	}
 
 	if(stage>=0) {
@@ -219,6 +228,20 @@ function command_autocomplete() {
 	}
 }
 
+function command_history_up() {
+	if(cmdHistPointer==0) return;
+	cmdHistPointer -= 1;
+	command = cmdHist[cmdHistPointer];
+	$(".console-input").val(command);
+}
+
+function command_history_down() {
+	if(cmdHistPointer == cmdHist.length-1) return;
+	cmdHistPointer += 1;
+	command = cmdHist[cmdHistPointer];
+	$(".console-input").val(command);
+}
+
 function input(e) {
 	if(!readyforinput) return;
 	window.clearInterval(intervalID);
@@ -241,6 +264,14 @@ function input(e) {
 		update=true;
 	} else if(e.which == 13) {
 		command_execute();
+		block=true;
+		update=true;
+	} else if(e.which == 38) {
+		command_history_up()
+		block=true;
+		update=true;
+	} else if(e.which == 40) {
+		command_history_down()
 		block=true;
 		update=true;
 	} else {
@@ -302,8 +333,10 @@ function input(e) {
 		e.preventDefault();
 	}
 
-	if(update)
+	if(update) {
 		currow.find(".cont").html("THSITG $&gt; "+command);
+		if(cmdHistPointer == cmdHist.length-1) cmdHist[cmdHistPointer] = command;
+	}
 
 	cursor_shown=true;
 	cursor.css("opacity","1");
@@ -516,9 +549,11 @@ $(document).ready(function() {
 
 	if(flushEnabled) {
 		$(".console-input").bind("input",function() {
-			console.log("int");
 			command = $(".console-input").val();
 			currow.find(".cont")[0].innerHTML="THSITG $&gt; "+command;
+
+			if(cmdHistPointer == cmdHist.length-1) cmdHist[cmdHistPointer] = command;
+
 			if(forceRepaintEnabled) {
 				//FIXME: not working right now
 				currow.hide(0,function() {
