@@ -15,6 +15,7 @@ var forceRepaintEnabled=false;
 
 var cmdHist = [""];
 var cmdHistPointer = 0;
+var consoleScroll = false;
 
 var cmdList = [
 	"thsitg_boot()",
@@ -167,7 +168,12 @@ function repositioning_rows() {
 	var height = rows.height();
 	//FIXME: Don't know why this isn't working
 	//rows.css("bottom",(height>550?25:575-height) + "px");
-	rows.css("top",(height>550?550-height:) + "px");
+	//rows.css("top",(height>550?550-height:0) + "px");
+	console.log("resize");
+	consoleScroll.resize();
+	// Force to scroll to maxium
+	console.log(consoleScroll);
+	consoleScroll.doScrollTop(consoleScroll.page.h-consoleScroll.rail.height());
 }
 
 var initRow=
@@ -574,6 +580,28 @@ $(document).ready(function() {
 		var target = $(e.target);
 		if(!target.is(".console") && !$.contains($(".console").get(0),e.target))
 			$(".console").removeClass("console-focus");
+	});
+
+	consoleScroll = $(".console").niceScroll({
+		horizrailenabled: false,
+		railpadding: {
+			top: 0,
+			right: 5,
+			left: 0,
+			bottom: 0
+		},
+		cursoropacitymin: 0.2,
+		cursoropacitymax: 0.5,
+		cursorwidth: 5,
+		cursorcolor: "#666",
+		cursorborder: "1px solid #AAA",
+		touchbehavior: true,
+		hwacceleration: true,
+		boxzoom: false,
+		grabcursorenabled: false,
+		enablekeyboard: false,
+		preservenativescrolling: false,
+		spacebarenabled: false
 	});
 	
 	console.log("Console loaded");

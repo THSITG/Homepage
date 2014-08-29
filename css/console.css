@@ -27,7 +27,7 @@
 
 .console-rows {
 	display: block;
-	position: relative;
+	position: static;
 
 	opacity: 1;
 
