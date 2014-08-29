@@ -56,7 +56,7 @@ var hintList = [
 	"再执行一次 variable",
 	"你可以再试一试定义更多的变量, 改变它们的值<br/>执行 start_tutor() 继续教程",
 	"执行 1 + 2 (加法)",
-	"执行 20 * 14 (减法)",
+	"执行 20 * 14 (乘法)",
 	"执行 10 / 5 (除法)",
 	"执行 7 % 5 (取余)",
 	"以上为针对数字的运算, 当然还有对于其他数据类型的运算<br/>执行 \"contact\" + \"multi\" (连接字符串)",
@@ -167,7 +167,7 @@ function repositioning_rows() {
 	var height = rows.height();
 	//FIXME: Don't know why this isn't working
 	//rows.css("bottom",(height>550?25:575-height) + "px");
-	rows.css("top",(height>550?550-height:0) + "px");
+	rows.css("top",(height>550?550-height:) + "px");
 }
 
 var initRow=
