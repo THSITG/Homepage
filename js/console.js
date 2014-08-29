@@ -167,7 +167,7 @@ function repositioning_rows() {
 	var height = rows.height();
 	//FIXME: Don't know why this isn't working
 	//rows.css("bottom",(height>550?25:575-height) + "px");
-	rows.css("top",(height>550?590-height:40) + "px");
+	rows.css("top",(height>550?550-height:0) + "px");
 }
 
 var initRow=

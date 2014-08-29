@@ -27,10 +27,7 @@
 
 .console-rows {
 	display: block;
-	position: absolute;
-
-	overflow: hidden;
-	width: 75%;
+	position: relative;
 
 	opacity: 1;
 
